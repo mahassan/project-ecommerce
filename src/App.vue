@@ -8,5 +8,7 @@
 </template>
 
 <style lang="scss">
-
+input[type='text']{
+    background: grey;
+}
 </style>

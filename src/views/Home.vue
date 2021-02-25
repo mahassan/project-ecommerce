@@ -2,10 +2,9 @@
     <div class="container">
       <div class="row">
         <div class="col-3">
-          <input type="text" v-model="search" name="" id="">
-          <button @click="searchItem(items)">Search</button>
+          <input type="text"v-model="searchItems" name="" id="">
           <ul v-if="items.length > 0">
-            <li v-for="item in items[0]" :key="item.id">
+            <li v-for="item in filteredPosts" :key="item.id">
               <img :src="item.image" alt="item.title">
               {{item.title}}
             </li>
@@ -25,10 +24,9 @@ export default {
   },
  data(){
    return{
-     name : "Ammar",
      items :  [],
      search : "",
-     searchItems : []
+     searchItems : ""
    }
  },
  methods: {
@@ -41,14 +39,21 @@ export default {
     })
   }
  },
-  async mounted(){
-    try {
-      const endpoint = await fetch('https://fakestoreapi.com/products/');
-      const result = await endpoint.json();
-      this.items.push(result)
-    } catch (error) {
-      console.log(error)
+computed: {
+    filteredPosts(){
+    return this.items[0].filter((item) => {
+      return item.title.match(this.searchItems)
+    })
     }
+ },
+  created(){
+      fetch('https://fakestoreapi.com/products/')
+      .then((res)=>{
+       return res.json()
+      })
+      .then((res)=>{
+        this.items.push(res)
+      })
   }
 }
 </script>
